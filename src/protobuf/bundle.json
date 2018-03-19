@@ -1,0 +1,386 @@
+{
+  "nested": {
+    "msg": {
+      "nested": {
+        "AIServerConnectRequest": {
+          "fields": {
+            "PlayerId": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "AIServerConnectReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "GetPointRequest": {
+          "fields": {}
+        },
+        "GetPointReponse": {
+          "fields": {
+            "X": {
+              "type": "int32",
+              "id": 1
+            },
+            "Y": {
+              "type": "int32",
+              "id": 2
+            },
+            "Z": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "MovePointRequest": {
+          "fields": {
+            "X": {
+              "type": "int32",
+              "id": 1
+            },
+            "Y": {
+              "type": "int32",
+              "id": 2
+            },
+            "nearby": {
+              "type": "float",
+              "id": 3
+            }
+          }
+        },
+        "MovePointReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "MoveTargetRequest": {
+          "fields": {
+            "target": {
+              "type": "int32",
+              "id": 1
+            },
+            "nearby": {
+              "type": "float",
+              "id": 2
+            }
+          }
+        },
+        "MoveTargetReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "CancelMoveRequest": {
+          "fields": {}
+        },
+        "CancelMoveReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "GetPlayerInfoRequest": {
+          "fields": {}
+        },
+        "GetPlayerInfoReponse": {
+          "fields": {
+            "hp": {
+              "type": "int32",
+              "id": 1
+            },
+            "mp": {
+              "type": "int32",
+              "id": 2
+            }
+          }
+        },
+        "ItemPosRequest": {
+          "fields": {
+            "itemUId": {
+              "type": "int32",
+              "id": 1
+            },
+            "itemId": {
+              "type": "int32",
+              "id": 2
+            },
+            "X": {
+              "type": "int32",
+              "id": 3
+            },
+            "Y": {
+              "type": "int32",
+              "id": 4
+            }
+          }
+        },
+        "GetAllPickItemRequest": {
+          "fields": {}
+        },
+        "GetAllPickItemReponse": {
+          "fields": {
+            "items": {
+              "rule": "repeated",
+              "type": "ItemPosRequest",
+              "id": 1
+            }
+          }
+        },
+        "GetPickItemRequest": {
+          "fields": {}
+        },
+        "GetPickItemReponse": {
+          "fields": {
+            "items": {
+              "rule": "repeated",
+              "type": "ItemPosRequest",
+              "id": 1
+            }
+          }
+        },
+        "PickItemRequest": {
+          "fields": {
+            "itemUId": {
+              "rule": "repeated",
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "PickItemReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "PlayerAttackRequest": {
+          "fields": {
+            "skillAttack": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "PlayerAttackReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "BagItemInfo": {
+          "fields": {
+            "itemindex": {
+              "type": "int32",
+              "id": 1
+            },
+            "itemId": {
+              "type": "int32",
+              "id": 2
+            },
+            "num": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "GetBagItemRequest": {
+          "fields": {}
+        },
+        "GetBagItemReponse": {
+          "fields": {
+            "bagItems": {
+              "rule": "repeated",
+              "type": "BagItemInfo",
+              "id": 1
+            }
+          }
+        },
+        "UseBagItemRequest": {
+          "fields": {
+            "bagItems": {
+              "type": "BagItemInfo",
+              "id": 1
+            }
+          }
+        },
+        "UseBagItemReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "NearPlayerInfo": {
+          "fields": {
+            "id": {
+              "type": "int32",
+              "id": 1
+            },
+            "x": {
+              "type": "int32",
+              "id": 2
+            },
+            "y": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "GetNearPlayerRequest": {
+          "fields": {}
+        },
+        "GetNearPlayerReponse": {
+          "fields": {
+            "PlayerInfo": {
+              "rule": "repeated",
+              "type": "NearPlayerInfo",
+              "id": 1
+            }
+          }
+        },
+        "SwitchWeaponRequest": {
+          "fields": {
+            "pos": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "SwitchWeaponReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "EquipWeaponRequest": {
+          "fields": {
+            "bagIndex": {
+              "type": "int32",
+              "id": 1
+            },
+            "equipIndex": {
+              "type": "int32",
+              "id": 2
+            }
+          }
+        },
+        "EquipWeaponReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            },
+            "bagItems": {
+              "rule": "repeated",
+              "type": "BagItemInfo",
+              "id": 2
+            }
+          }
+        },
+        "HorseRideRequest": {
+          "fields": {
+            "ride": {
+              "type": "bool",
+              "id": 1
+            }
+          }
+        },
+        "HorseRideReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "NearRideInfo": {
+          "fields": {
+            "ride": {
+              "type": "int32",
+              "id": 1
+            },
+            "x": {
+              "type": "int32",
+              "id": 2
+            },
+            "y": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "GetHorseRequest": {
+          "fields": {}
+        },
+        "GetHorseReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            },
+            "HorseInfo": {
+              "rule": "repeated",
+              "type": "NearRideInfo",
+              "id": 2
+            }
+          }
+        },
+        "LookAtRequest": {
+          "fields": {
+            "x": {
+              "type": "int32",
+              "id": 1
+            },
+            "y": {
+              "type": "int32",
+              "id": 2
+            },
+            "z": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "LookAtReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "LaunchRequest": {
+          "fields": {}
+        },
+        "LaunchReponse": {
+          "fields": {
+            "result": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

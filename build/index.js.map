@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.js"],"names":["console","log"],"mappings":";;AAAA;;AAEAA,QAAQC,GAAR,CAAY,mBAAI,CAAJ,EAAM,CAAN,CAAZ","file":"index.js","sourcesContent":["import {add} from \"./message_tool/msg_tool\"\r\n\r\nconsole.log(add(1,2));\r\n"]}

@@ -1,0 +1,36 @@
+﻿syntax = "proto3";
+package msg;
+
+// 当前AI连接服务器请求  client->AI
+message AIServerConnectRequest {
+	int32 PlayerId = 1; // 玩家ID
+}
+
+// AI->client
+message AIServerConnectReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+// 获取当前AI位置 AI->client
+message GetPointRequest {
+	
+}
+
+// client->AI
+message GetPointReponse {
+	int32 X = 1; // 移动点X坐标
+    int32 Y = 2; // 移动点Y坐标
+    int32 Z = 3; // 移动点Z坐标
+}
+
+// 当前AI移动  AI->client
+message MovePointRequest {
+	int32 X = 1; // 移动点X坐标
+    int32 Y = 2; // 移动点Y坐标
+}
+
+// client->AI
+message MovePointReponse {
+	int32 result = 1; // 结果
+}
+

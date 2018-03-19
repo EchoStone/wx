@@ -1,0 +1,14 @@
+{
+    "MovePointRequest": {
+        "type": "random",
+        "value": [{
+            "X": 2120,
+            "Y": 2234,
+            "nearby": 3.2
+        }, {
+            "X": 1111,
+            "Y": 2222,
+            "nearby": 3.3
+        }]
+    }
+}

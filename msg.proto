@@ -1,0 +1,256 @@
+﻿syntax = "proto3";
+package msg;
+
+//-----------------------------------------------------------
+// 当前AI连接服务器请求  client->AI
+message AIServerConnectRequest {
+	int32 PlayerId = 1; // 玩家ID
+}
+
+// AI->client
+message AIServerConnectReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+//-----------------------------------------------------------
+
+// 获取当前AI位置 AI->client
+message GetPointRequest {
+	
+}
+
+// client->AI
+message GetPointReponse {
+	int32 X = 1; // 移动点X坐标
+    int32 Y = 2; // 移动点Y坐标
+    int32 Z = 3; // 移动点Z坐标
+}
+
+//-----------------------------------------------------------
+
+// 当前AI移动  AI->client
+message MovePointRequest {
+	int32 X = 1; // 移动点X坐标
+    int32 Y = 2; // 移动点Y坐标
+	float nearby =3; // 移动精度
+}
+
+// client->AI
+message MovePointReponse {
+	int32 result = 1; // 结果
+}
+
+//-----------------------------------------------------------
+
+// 当前AI移动(目标)  AI->client
+message MoveTargetRequest {
+	int32 target = 1; // 移动点X坐标
+	float nearby =2; // 移动精度
+}
+
+// client->AI
+message MoveTargetReponse {
+	int32 result = 1; // 结果
+}
+
+//-----------------------------------------------------------
+
+// 取消AI移动(目标)  AI->client
+message CancelMoveRequest {
+}
+
+// client->AI
+message CancelMoveReponse {
+	int32 result = 1; // 结果
+}
+
+//-----------------------------------------------------------
+
+// 获取当前玩家属性值  AI->client
+message GetPlayerInfoRequest {
+	
+}
+
+message GetPlayerInfoReponse {
+	int32 hp = 1; // 当前血量
+	int32 mp = 2; // 当前魔法量
+}
+
+//-----------------------------------------------------------
+
+message ItemPosRequest {
+	int32 itemUId = 1; // 物品uID
+	int32 itemId = 2; // 物品ID
+	int32 X = 3; // 移动点X坐标
+    int32 Y = 4; // 移动点Y坐标
+}
+
+
+// 获取周围所有可拾取物品列表 AI->client
+message GetAllPickItemRequest {
+	
+}
+
+message GetAllPickItemReponse {
+	repeated ItemPosRequest items = 1; // 周围物品列表
+}
+
+//-----------------------------------------------------------
+
+// 获取可拾取物品列表 AI->client
+message GetPickItemRequest {
+	
+}
+
+message GetPickItemReponse {
+	repeated ItemPosRequest items = 1; // 周围可拾取物品
+}
+
+//-----------------------------------------------------------
+
+// 拾取物品列表 AI->client
+message PickItemRequest {
+	repeated int32 itemUId = 1; // 周围可拾取物品UID
+}
+
+message PickItemReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+//-----------------------------------------------------------
+
+
+// 攻击指令 AI->client
+message PlayerAttackRequest {
+	int32 skillAttack = 1; // 1-普通攻击 2-4 -3个技能攻击
+}
+
+message PlayerAttackReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+//-----------------------------------------------------------
+
+message BagItemInfo {
+	int32 itemindex = 1; // 物品uID
+	int32 itemId = 2; // 物品ID
+	int32 num = 3; // 数量
+}
+
+// 获取背包索引和物品信息 AI->client
+message GetBagItemRequest {
+	
+}
+
+message GetBagItemReponse {
+	repeated BagItemInfo bagItems = 1;
+}
+
+//-----------------------------------------------------------
+
+// 使用物品 AI->client
+message UseBagItemRequest {
+	BagItemInfo bagItems = 1;
+}
+
+message UseBagItemReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+
+message NearPlayerInfo {
+	int32 id = 1; // 人物ID
+	int32 x = 2; // 位置x
+	int32 y = 3; // 位置y
+}
+
+// 获取周围其他AI
+message GetNearPlayerRequest {
+
+}
+
+message GetNearPlayerReponse {
+	repeated NearPlayerInfo PlayerInfo = 1;
+}
+
+//-----------------------------------------------------------
+
+// 切换武器 AI->client
+message SwitchWeaponRequest {
+	int32 pos = 1; // 0-空手 1-1号武器位置 2-2号武器位置 3-3号武器位置
+}
+
+message SwitchWeaponReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+// 装备武器 AI->client
+message EquipWeaponRequest {
+	int32 bagIndex = 1; // 背包位置
+	int32 equipIndex = 2; // 装备位置
+}
+
+message EquipWeaponReponse {
+	int32 result = 1;
+	repeated BagItemInfo bagItems = 2; // 背包信息
+}
+
+//-----------------------------------------------------------
+
+// 上马 AI->client
+message HorseRideRequest {
+	bool ride = 1; // 是否骑马
+}
+
+message HorseRideReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+message NearRideInfo {
+	int32 ride = 1; // 是否被骑乘
+	int32 x = 2; // 位置x
+	int32 y = 3; // 位置y
+}
+
+
+// 获取周围马位置 AI->client
+message GetHorseRequest {
+	
+}
+
+message GetHorseReponse {
+	int32 result = 1;
+	repeated NearRideInfo HorseInfo = 2;
+}
+
+//-----------------------------------------------------------
+
+// 远程用(看向位置) AI->client
+message LookAtRequest {
+	int32 x = 1; // 位置x
+	int32 y = 2; // 位置y
+	int32 z = 3; // 位置z
+}
+
+message LookAtReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+// 远程用射击 AI->client
+message LaunchRequest {
+	
+}
+
+message LaunchReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------

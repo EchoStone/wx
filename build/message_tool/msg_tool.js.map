@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/message_tool/msg_tool.js"],"names":["add","x","y"],"mappings":";;;;;QAAgBA,G,GAAAA,G;AAAT,SAASA,GAAT,CAAaC,CAAb,EAAgBC,CAAhB,EAAmB;AACtB,WAAOD,IAAIC,CAAJ,GAAO,CAAd;AACH","file":"msg_tool.js","sourcesContent":["export function add(x, y) {\n    return x + y +1;\n}"]}
