@@ -1,0 +1,295 @@
+﻿syntax = "proto3";
+package msg;
+
+//-----------------------------------------------------------
+// 当前AI连接服务器请求  client->AI
+message AIServerConnectRequest {
+	int32 PlayerId = 1; // 玩家ID
+}
+
+// AI->client
+message AIServerConnectReponse {
+	int32 result = 1;  // 结果 0-正确 非0-不正确
+}
+
+//-----------------------------------------------------------
+
+// 获取当前AI位置 AI->client
+message GetPointRequest {
+	
+}
+
+// client->AI
+message GetPointReponse {
+	int32 X = 1; // 移动点X坐标(厘米)
+    int32 Y = 2; // 移动点Y坐标(厘米)
+    int32 Z = 3; // 移动点Z坐标(厘米)
+}
+
+//-----------------------------------------------------------
+
+// 设置当前AI移动目标位置  AI->client
+message MovePointRequest {
+	int32 X = 1; 		// 移动目标点X坐标(厘米)
+    int32 Y = 2; 		// 移动目标点Y坐标(厘米)
+	float nearby =3; 	// 移动精度(距离目标多远停止下来)
+}
+
+// client->AI
+message MovePointReponse {
+	int32 result = 1; // 结果 0-正确 非0-不正确
+}
+
+//-----------------------------------------------------------
+
+// 当前AI移动(目标)  AI->client
+message MoveTargetRequest {
+	int32 target = 1;   // 目标ID 追着目标移动(一直到满足移动精度设定的距离后停下来)
+	float nearby =2;    // 移动精度
+}
+
+// client->AI
+message MoveTargetReponse {
+	int32 result = 1; // 结果  非0-不正确
+}
+
+//-----------------------------------------------------------
+
+// 取消AI当前的移动(坐标点和目标 移动都能取消)  AI->client
+message CancelMoveRequest {
+}
+
+// client->AI
+message CancelMoveReponse {
+	int32 result = 1; // 结果   非0-不正确
+}
+
+//-----------------------------------------------------------
+
+// 获取当前玩家属性值  AI->client
+message GetPlayerInfoRequest {
+	
+}
+
+message GetPlayerInfoReponse {
+	int32 hp = 1; // 当前血量值 (整数运算 为0 代表人物死亡)
+	int32 mp = 2; // 当前魔法量 (整数运算 魔法不够时候 无法攻击,使用技能, 会在不使用技能的状态下缓慢恢复)
+}
+
+//-----------------------------------------------------------
+
+// 可拾取物品对象
+message ItemPosRequest {
+	int32 itemUId = 1; // 物品uID 物品的世界ID 可以通过这个ID去拾取这个物品
+	int32 itemId = 2; // 物品ID   物品本身的ID 配合物品静态表.可以查询当前物品的类型
+	int32 X = 3; // 物品所在点X坐标
+    int32 Y = 4; // 物品所在点Y坐标
+}
+
+
+// 获取周围所有可拾取物品列表 AI->client
+message GetAllPickItemRequest {
+	
+}
+
+message GetAllPickItemReponse {
+	repeated ItemPosRequest items = 1; // 周围物品列表
+}
+
+//-----------------------------------------------------------
+
+// 获取可拾取物品列表 AI->client 
+// (配合GetAllPickItemRequest 使用, 上一条消息(GetAllPickItemRequest) 指获取到当前客户端所能刷新到所有物品的信息,但是可能在很远,无法拾取到)
+// 这个时候可以通过移动到相应可拾取物品对象的坐标上(误差在 50里面), 通过这个消息,就能知道可以拾取的物品列表
+message GetPickItemRequest {
+	
+}
+
+message GetPickItemReponse {
+	repeated ItemPosRequest items = 1; // 周围可拾取物品
+}
+
+//-----------------------------------------------------------
+
+// 拾取一个物品 AI->client
+message PickItemRequest {
+	repeated int32 itemUId = 1; // 物品的世界ID 周围可拾取物品UID
+}
+
+message PickItemReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+//-----------------------------------------------------------
+
+// 搜索当前面向的其他AI 并且锁定他
+message SetAttackIdRequest {
+	
+}
+
+message SetAttackIdReponse {
+	int32 result = 1;  // 结果 0-正确
+	int32 target_id = 2;  // 被锁定的目标ID
+}
+
+//-----------------------------------------------------------
+
+// 取消设置当前目标ID
+message CancelAttackIdRequest {
+	
+}
+
+message CancelAttackIdReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+//-----------------------------------------------------------
+
+// 获取当前目标ID
+message GetAttackIdRequest {
+	
+}
+
+message GetAttackIdReponse {
+	int32 result = 1;  // 结果 0-正确
+	int32 target_id = 2;  // 被锁定的目标ID
+}
+
+//-----------------------------------------------------------
+
+// 攻击指令 AI->client
+message PlayerAttackRequest {
+	int32 skillAttack = 1; // 1-普通攻击(不需要学习技能书就能攻击) 2-4 -3个技能攻击(学习相应武器对应的技能书后能使用,顺序和学习的顺序一致)
+}
+
+message PlayerAttackReponse {
+	int32 result = 1;  // 结果 0-正确
+}
+
+//-----------------------------------------------------------
+// 自己身上背包里的物品信息
+message BagItemInfo {
+	int32 itemindex = 1; // 物品背包索引
+	int32 itemId = 2; 	// 物品本身的ID
+	int32 num = 3;     // 数量
+}
+
+// 获取背包索引和物品信息 AI->client
+message GetBagItemRequest {
+	
+}
+
+message GetBagItemReponse {
+	repeated BagItemInfo bagItems = 1;
+}
+
+//-----------------------------------------------------------
+
+// 使用物品 AI->client
+message UseBagItemRequest {
+	BagItemInfo bagItems = 1; // 使用背包里的一个物品
+}
+
+message UseBagItemReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+// 客户端周围能看见的其他AI的ID和位置
+message NearPlayerInfo {
+	int32 id = 1; // 人物ID
+	int32 x = 2; // 位置x
+	int32 y = 3; // 位置y
+}
+
+// 获取周围其他AI
+message GetNearPlayerRequest {
+
+}
+
+message GetNearPlayerReponse {
+	repeated NearPlayerInfo PlayerInfo = 1;
+}
+
+//-----------------------------------------------------------
+
+// 切换武器 AI->client
+// 切换当前武器 现在游戏近战一共 3个位置 0,1,2 分别代表 空手 1号栏位 和 2号栏位
+// 当前默认空手, 假设一号栏位有武器(拾取武器后自动根据顺序装备到1,2号栏位), 切换1号栏位武器 就直接传递1进去 . 要是再次传个1进去, 会变成收起武器,这时候变成空手
+// 3号栏位是远程武器栏位
+message SwitchWeaponRequest {
+	int32 pos = 1; // 0-空手 1-1号武器位置 2-2号武器位置 3-3号武器位置
+}
+
+message SwitchWeaponReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+// 装备武器 将背包指定格子的武器装备到指定栏位上去(1,2,3) AI->client
+message EquipWeaponRequest {
+	int32 bagIndex = 1; // 背包位置
+	int32 equipIndex = 2; // 装备位置
+}
+
+message EquipWeaponReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+// 上马( 在马附近 摄像机必须看向马(必须配合LookAtRequest),才能使用 ) AI->client
+message HorseRideRequest {
+	bool ride = 1; // 是否骑马 true-骑马 flase-下马
+}
+
+message HorseRideReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+message NearRideInfo {
+	int32 ride = 1; // 是否被骑乘 0-没有被骑乘 1-有人在上面
+	int32 x = 2; // 位置x
+	int32 y = 3; // 位置y
+}
+
+
+// 获取周围马位置 AI->client
+message GetHorseRequest {
+	
+}
+
+message GetHorseReponse {
+	int32 result = 1;
+	repeated NearRideInfo HorseInfo = 2;
+}
+
+//-----------------------------------------------------------
+
+// 设置摄像机看向的目标位置 远程,骑马用(看向位置) AI->client
+message LookAtRequest {
+	int32 x = 1; // 位置x
+	int32 y = 2; // 位置y
+	int32 z = 3; // 位置z
+}
+
+message LookAtReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
+
+// 远程用射击 AI->client (在有远程武器和弹药的情况下, 使用3切换远程, 可以调用使用射击)
+message LaunchRequest {
+	
+}
+
+message LaunchReponse {
+	int32 result = 1;
+}
+
+//-----------------------------------------------------------
