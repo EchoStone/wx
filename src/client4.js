@@ -63,11 +63,12 @@ protobuf.load("AIMsg.proto", function (err, root) {
     //     contentBuf1 = Buffer.concat([contentBuf1, Buffer.from([0x0D, 0x0A])]);
     var MovePointRequest = root.lookupType("msg.MovePointRequest");
 
+    var GetAllPickItemReponse = root.lookupType("msg.GetAllPickItemReponse");
 
     socket.on("data", function (msg) {
         // console.log("[UDP-CLIENT] Received message: " + HelloCoverRsp.decode(msg).reply + " from " + rinfo.address + ":" + rinfo.port);
         msg = msg.slice(10, msg.length)
-        console.log(MovePointRequest.decode(msg).X);
+        console.log(MovePointRequest.decode(msg));
 
         //udpSocket = null;
     });

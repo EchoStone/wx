@@ -56,29 +56,58 @@ export default class MsgHandle {
         this.changeMessageHandle(messageId)
         this.messageId = messageId
         try {
-            let payloadInfo = config.get(messageId)
-            if (!payloadInfo.type || !payloadInfo.value || payloadInfo.value.length < 1) {
-                return returnObj
-            }
-            let allValue = payloadInfo.value
-            let oneValue = {}
-            if ('one' == payloadInfo.type && allValue.length >= 1) {
-                oneValue = allValue[0]
-            } else if ('random' == payloadInfo.type) {
-                oneValue = shuffle(allValue.slice(0))[0];
-            }
+
             let fields = this.messageHandle.fieldsArray
+            let oneValue = this.getOnePayloadValue(messageId)
             fields.forEach(item => {
-                if (oneValue[item.name]) {
+                if (item.repeated && oneValue[item.name] && oneValue[item.name].parent) {
+                    returnObj[item.name] = [this.handleParentPayloadValue(oneValue[item.name], item.name)[item.name]]
+                } else if (oneValue[item.name] && !oneValue[item.name].parent) {
                     returnObj[item.name] = oneValue[item.name]
                 }
             });
-
+            return returnObj
         } catch (error) {
             global.logger.error("MsgHandle.js/getDataPayload:" + error)
             console.log(error);
         }
         return returnObj
+    }
+
+    handleParentPayloadValue(oneValue, MsgName) {
+        let returnObj = {}
+        if (!oneValue.parent) {
+            return returnObj
+        }
+        let returnObjNow = this.getOnePayloadValue(oneValue.parent, oneValue.type)
+        returnObj[MsgName] = {}
+        for (let p in returnObjNow) {
+            if (returnObjNow.parent) {
+                returnObj[MsgName] = [this.handleParentPayloadValue(returnObjNow[p], p)]
+            } else {
+                returnObj[MsgName][p] = returnObjNow[p]
+            }
+        }
+        return returnObj
+    }
+
+    getOnePayloadValue(messageId, type) {
+        let payloadInfo = config.get(messageId)
+        if (!payloadInfo.type || !payloadInfo.value || payloadInfo.value.length < 1) {
+            return {}
+        }
+        let allValue = payloadInfo.value
+        let oneValue = {}
+        if ('one' == type) {
+            oneValue = allValue[0]
+        } else if ('random' == type) {
+            oneValue = shuffle(allValue.slice(0))[0];
+        } else if ('one' == payloadInfo.type && allValue.length >= 1) {
+            oneValue = allValue[0]
+        } else if ('random' == payloadInfo.type) {
+            oneValue = shuffle(allValue.slice(0))[0];
+        }
+        return oneValue
     }
 
     handlePayload(payload) {

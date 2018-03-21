@@ -1,0 +1,63 @@
+// // var copy = new Buffer(jsonData);
+            // data = data.slice(10, data.length)
+            // // console.log(jsonData)
+            // var message = '';
+            // // try{
+
+            // var requestMsg = AIServerConnectRequest.decode(data);
+
+            // // if(typeof(requestMsg.PlayerId) != "undefined"){
+            // console.log("游戏选手ID：" + requestMsg.PlayerId)
+
+            // var AIMsg = root.lookupType("msg.MovePointRequest");
+            // var MovePointRequest = AIMsg
+            // var AIServerConnectReponse = root.lookupType("msg.AIServerConnectReponse");
+
+            // var coverRspObj = {
+            //     X: 100,
+            //     Y: 100
+            // };
+
+            // var AIServerConnectReponseResult = {
+            //     result: 0
+            // }
+            // var errMsgRes = MovePointRequest.verify(AIServerConnectReponseResult);
+
+
+            // var errMsg = MovePointRequest.verify(coverRspObj);
+            // // if (errMsg) {
+            // //     throw Error(errMsg);
+            // // }
+            // var message = MovePointRequest.create(coverRspObj);
+            // var buffer = MovePointRequest.encode(message).finish();
+
+            // var messageConnect = MovePointRequest.create(AIServerConnectReponseResult);
+            // var bufferConnect = MovePointRequest.encode(messageConnect).finish();
+
+            // var index = test.readUInt16LE(0)
+            // // var index = test.readUInt16LE(0) + 1
+
+            // var msgIdRequest = 59566240;
+
+            // if (index == 1) {
+            //     // buffer = bufferConnect
+            //     // msgIdRequest = 1586407982
+            // }
+
+            // const bufIndex = Buffer.allocUnsafe(2);
+            // bufIndex.writeUInt16LE(index)
+
+            // const bufMsgIdRequest = Buffer.allocUnsafe(4);
+            // bufMsgIdRequest.writeUInt32LE(msgIdRequest)
+
+            // console.log("zhi:=====" + bufMsgIdRequest.readUInt32LE(0))
+
+            // var msgLength = buffer.length
+            // const bufMsgLength = Buffer.allocUnsafe(4);
+            // bufMsgLength.writeUInt32LE(msgLength)
+
+            // const totalLength = bufIndex.length + bufMsgIdRequest.length + bufMsgLength.length + buffer.length;
+            // message = Buffer.concat([bufIndex, bufMsgIdRequest, bufMsgLength, buffer], totalLength);
+
+            // console.log("发送的消息为:" + message)
+            // sock.write(message)

@@ -10,5 +10,36 @@
             "Y": 2222,
             "nearby": 3.3
         }]
+    },
+    "GetAllPickItemReponse": {
+        "type": "one",
+        "value": [{
+            "items": {
+                "parent": "ItemPosRequest",
+                "type": "random"
+            }
+        }]
+    },
+    "ItemPosRequest": {
+        "type": "one",
+        "value": [{
+                "itemUId": 83,
+                "itemId": 91,
+                "X": 2001,
+                "Y": 3001
+            },
+            {
+                "itemUId": 84,
+                "itemId": 92,
+                "X": 2002,
+                "Y": 3002
+            },
+            {
+                "itemUId": 85,
+                "itemId": 93,
+                "X": 2003,
+                "Y": 3003
+            }
+        ]
     }
 }
