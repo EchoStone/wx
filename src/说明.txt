@@ -1,1 +1,14 @@
 pbjs -t json AIMsg.proto > bundle.json
+
+
+
+
+// let dataPayload = {
+        //     items: [{
+        //         itemUId: 84,
+        //         itemId: 92,
+        //         X: 2002,
+        //         Y: 3002
+        //     }]
+        // }
+        // msgHandle.changeMessageHandle(msgId)

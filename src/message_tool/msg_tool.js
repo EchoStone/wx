@@ -19,13 +19,6 @@ export function getMessageId(hash) {
     return messageId
 }
 
-/**
- * 获取索引index
- */
-export function getMessageIndex() {
-    global.globalIndex = global.globalIndex + 1
-    return global.globalIndex
-}
 
 /**
  * 
@@ -151,9 +144,21 @@ export function getShortId() {
     return socketId
 }
 
-export function getOneConnectGlobalObject(id) {
+/**
+ * 获取索引index
+ */
+export function getMessageIndex(id) {
+    setOneConnectGlobalIndexAddOne(id)
+    let obj = getOneConnectGlobalObject(id)
+    return obj.index
+}
+
+function getOneConnectGlobalObject(id) {
+    if (!id) {
+        global.logger.error("msg_tool.js/getOneConnectGlobalObject: socketId 不能为空")
+    }
     let objectInfo = global[id]
-    if (!objectInfo) {
+    if (!objectInfo || typeof (objectInfo) == 'undefined') {
         objectInfo = {
             index: 0,
             socket_id: id,
@@ -163,3 +168,43 @@ export function getOneConnectGlobalObject(id) {
     }
     return objectInfo
 }
+
+function setOneConnectGlobalObject(id, key, value) {
+    if (!id) {
+        global.logger.error("msg_tool.js/setOneConnectGlobalObject: socketId 不能为空")
+    }
+    if (!key) {
+        global.logger.error("msg_tool.js/setOneConnectGlobalObject: key 不能为空")
+    }
+    let objectInfo = global[id]
+    let flag = false
+    if (objectInfo && typeof (objectInfo) != 'undefined') {
+        objectInfo[key] = value
+        global[id] = objectInfo
+        flag = true
+    }
+    if (!flag) {
+        global.logger.error("msg_tool.js/setOneConnectGlobalObject: 设置用户全局属性失败")
+    }
+    return flag
+}
+
+function setOneConnectGlobalIndexAddOne(id) {
+    if (!id) {
+        global.logger.error("msg_tool.js/setOneConnectGlobalIndexAddOne: socketId 不能为空")
+    }
+    let objectInfo = global[id]
+    let flag = false
+    if (objectInfo && typeof (objectInfo) != 'undefined') {
+
+        flag = setOneConnectGlobalObject(id, 'index', objectInfo['index'] + 1)
+    }
+    if (!flag) {
+        global.logger.error("msg_tool.js/setOneConnectGlobalIndexAddOne: 索引+1 失败")
+    }
+    return flag
+}
+
+exports.getOneConnectGlobalObject = getOneConnectGlobalObject
+exports.setOneConnectGlobalObject = setOneConnectGlobalObject
+exports.setOneConnectGlobalIndexAddOne = setOneConnectGlobalIndexAddOne

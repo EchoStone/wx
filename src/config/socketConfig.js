@@ -1,5 +1,10 @@
 var net = require('net');
 
+import {
+    getOneConnectGlobalObject,
+    getShortId,
+} from "../message_tool/msg_tool"
+
 export default class socketConfig {
 
     constructor(socket, option = {}) {
@@ -13,14 +18,13 @@ export default class socketConfig {
     }
 
     init(waitTime = 600) {
-
+        this.socket.socketId = getShortId()
         let sock = this.socket
-        console.log(sock);
-
+        getOneConnectGlobalObject(this.socket.socketId) // 初始化用户数据
         global.logger.debug('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort)
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
 
-        this.socket.on('data', data => {
+        sock.on('data', data => {
             this.cb(data, this.socket)
         });
 
@@ -33,14 +37,14 @@ export default class socketConfig {
 
         // 为这个socket实例添加一个"close"事件处理函数
         sock.on('close', function () {
-            global.globalIndex = 0
+            global[sock.socketId] = undefined
             console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
             global.logger.info('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort)
         });
 
         // 为这个socket实例添加一个"end"事件处理函数
         sock.on('end', function () {
-            global.globalIndex = 0
+            global[sock.socketId] = undefined
             console.log('end: ' + sock.remoteAddress + ' ' + sock.remotePort);
             global.logger.info('end: ' + sock.remoteAddress + ' ' + sock.remotePort)
         });
