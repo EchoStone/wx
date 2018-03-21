@@ -20,8 +20,9 @@ export default class socketConfig {
     init(waitTime = 600) {
         this.socket.socketId = getShortId()
         let sock = this.socket
-        getOneConnectGlobalObject(this.socket.socketId) // 初始化用户数据
-        global.logger.debug('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort)
+        let socketId = this.socket.socketId
+        getOneConnectGlobalObject(socketId) // 初始化用户数据
+        global.logger.debug('CONNECTED，socketId为：' + socketId + ",地址为：" + sock.remoteAddress + ':' + sock.remotePort)
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
 
         sock.on('data', data => {
@@ -32,21 +33,21 @@ export default class socketConfig {
         //设置超时时间
         sock.setTimeout(1000 * waitTime, function () {
             console.log('客户端在' + waitTime + 's内未通信，将断开连接...');
-            global.logger.info('客户端在' + waitTime + 's内未通信，将断开连接...')
+            global.logger.info('客户端在，socketId为：' + socketId + "," + waitTime + 's内未通信，将断开连接...')
         });
 
         // 为这个socket实例添加一个"close"事件处理函数
         sock.on('close', function () {
             global[sock.socketId] = undefined
             console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
-            global.logger.info('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort)
+            global.logger.info('CLOSED:socketId为：' + socketId + "," + sock.remoteAddress + ' ' + sock.remotePort)
         });
 
         // 为这个socket实例添加一个"end"事件处理函数
         sock.on('end', function () {
             global[sock.socketId] = undefined
             console.log('end: ' + sock.remoteAddress + ' ' + sock.remotePort);
-            global.logger.info('end: ' + sock.remoteAddress + ' ' + sock.remotePort)
+            global.logger.info('end:socketId为：' + socketId + "," + sock.remoteAddress + ' ' + sock.remotePort)
         });
 
         // 为这个socket实例添加一个"error"事件处理函数

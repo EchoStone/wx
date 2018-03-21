@@ -1,9 +1,9 @@
 {
     "MovePointRequest": {
-        "type": "random",
+        "type": "one",
         "value": [{
-            "X": 2120,
-            "Y": 2234,
+            "X": 1000,
+            "Y": 2330,
             "nearby": 3.2
         }, {
             "X": 1111,
@@ -41,5 +41,8 @@
                 "Y": 3003
             }
         ]
+    },
+    "CancelMoveRequest": {
+        "type": "none"
     }
 }

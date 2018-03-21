@@ -154,8 +154,9 @@ export function getMessageIndex(id) {
 }
 
 function getOneConnectGlobalObject(id) {
-    if (!id) {
+    if (!id || typeof (id) == 'undefined') {
         global.logger.error("msg_tool.js/getOneConnectGlobalObject: socketId 不能为空")
+        return {}
     }
     let objectInfo = global[id]
     if (!objectInfo || typeof (objectInfo) == 'undefined') {

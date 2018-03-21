@@ -1,6 +1,14 @@
 var protobuf = require("protobufjs");
 var config = require('config');
 var shuffle = require('knuth-shuffle').knuthShuffle;
+import {
+    getMessageId,
+    getMessageHash,
+    getWxMsgInfo,
+    getSendWxMsgBuf,
+    getMessageIndex,
+    getOneConnectGlobalObject
+} from "./msg_tool"
 
 export default class MsgHandle {
 
@@ -49,7 +57,7 @@ export default class MsgHandle {
 
     getDataPayload(messageId, payload) {
         let returnObj = {}
-        if (!messageId) {
+        if (!messageId || typeof (messageId) == 'undefined') {
             global.logger.error("MsgHandle.js/getDataPayload: MessageId为空")
             return returnObj
         }
@@ -93,7 +101,7 @@ export default class MsgHandle {
 
     getOnePayloadValue(messageId, type) {
         let payloadInfo = config.get(messageId)
-        if (!payloadInfo.type || !payloadInfo.value || payloadInfo.value.length < 1) {
+        if ('none' == payloadInfo.type || !payloadInfo.type || !payloadInfo.value || payloadInfo.value.length < 1) {
             return {}
         }
         let allValue = payloadInfo.value
@@ -149,5 +157,60 @@ export default class MsgHandle {
         return object
     }
 
+    /**
+     * 
+     * @param {*} socketId 
+     * @param {*} messageId 消息的id，不是hash
+     * 获取发送数据包
+     */
+    getSendMsg(socketId, messageId) {
+        let index = getMessageIndex(socketId)
+        let messageIdHash = getMessageHash(messageId)
+        let dataPayload = this.getDataPayload(messageId)
+        let sendMsg = getSendWxMsgBuf({
+            index: index,
+            msgId: messageIdHash,
+            dataPayload: this.createProtoBuf(dataPayload)
+        })
+        global.logger.info("MsgHandle.js/getSendMsg/ socketId为:" + socketId + ",消息ID为：" + messageId + ',发送的数据为：' + JSON.stringify(dataPayload))
+        return sendMsg
+    }
 
+    /**
+     * 
+     * @param {*} data 
+     * @param {*} msgHandle 
+     * 获取接受的消息体
+     */
+    getResponseMsg(data, socketId) {
+        let responseObj = {}
+        let requestInfo = getWxMsgInfo(data)
+        if (!requestInfo.msgId || typeof (requestInfo.msgId) == 'undefined') {
+            global.logger.error('解封包失败: ' + JSON.stringify(data))
+            return responseObj
+        }
+        let msgId = getMessageId(requestInfo.msgId)
+        this.changeMessageHandle(msgId)
+        responseObj = this.getPayloadObject(requestInfo.dataPayload)
+        global.logger.info("MsgHandle.js/getResponseMsg/ socketId为:" + socketId + ",消息ID为：" + msgId + ',接受到的数据为：' + JSON.stringify(responseObj))
+
+        return responseObj
+    }
+
+    /**
+     * 
+     * @param {*} socket 
+     * @param {*} msg 
+     * @param {*} time  second
+     * 发送消息
+     */
+    handleToSendMsg(socket, msg, time = 0) {
+        if (time > 0) {
+            setTimeout(() => {
+                socket.write(msg)
+            }, time * 1000)
+        } else {
+            socket.write(msg)
+        }
+    }
 }
