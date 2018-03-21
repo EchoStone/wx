@@ -2,38 +2,6 @@
   "nested": {
     "msg": {
       "nested": {
-        "PingRequest": {
-          "fields": {
-            "clientTime": {
-              "type": "uint64",
-              "id": 1
-            },
-            "serverTime": {
-              "type": "uint64",
-              "id": 2
-            },
-            "index": {
-              "type": "uint32",
-              "id": 3
-            }
-          }
-        },
-        "PingResponse": {
-          "fields": {
-            "clientTime": {
-              "type": "uint64",
-              "id": 1
-            },
-            "serverTime": {
-              "type": "uint64",
-              "id": 2
-            },
-            "index": {
-              "type": "uint32",
-              "id": 3
-            }
-          }
-        },
         "AIServerConnectRequest": {
           "fields": {
             "PlayerId": {
@@ -200,47 +168,6 @@
             }
           }
         },
-        "SetAttackIdRequest": {
-          "fields": {}
-        },
-        "SetAttackIdReponse": {
-          "fields": {
-            "result": {
-              "type": "int32",
-              "id": 1
-            },
-            "targetId": {
-              "type": "int32",
-              "id": 2
-            }
-          }
-        },
-        "CancelAttackIdRequest": {
-          "fields": {}
-        },
-        "CancelAttackIdReponse": {
-          "fields": {
-            "result": {
-              "type": "int32",
-              "id": 1
-            }
-          }
-        },
-        "GetAttackIdRequest": {
-          "fields": {}
-        },
-        "GetAttackIdReponse": {
-          "fields": {
-            "result": {
-              "type": "int32",
-              "id": 1
-            },
-            "targetId": {
-              "type": "int32",
-              "id": 2
-            }
-          }
-        },
         "PlayerAttackRequest": {
           "fields": {
             "skillAttack": {
@@ -362,6 +289,11 @@
             "result": {
               "type": "int32",
               "id": 1
+            },
+            "bagItems": {
+              "rule": "repeated",
+              "type": "BagItemInfo",
+              "id": 2
             }
           }
         },

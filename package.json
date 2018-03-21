@@ -19,6 +19,7 @@
     "knuth-shuffle": "^1.0.8",
     "log4js": "^2.5.3",
     "protobufjs": "^6.8.6",
+    "shortid": "^2.2.8",
     "ws": "^4.1.0"
   },
   "devDependencies": {

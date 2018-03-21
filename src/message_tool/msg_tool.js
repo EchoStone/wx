@@ -1,3 +1,4 @@
+var shortid = require('shortid');
 /**
  * 
  * @param {*} hash 
@@ -143,4 +144,22 @@ export function getSendWxMsgBuf(data) {
         global.logger.error("msg_tool.js/getSendWxMsgBuf:" + error)
     }
     return messageBuf
+}
+
+export function getShortId() {
+    let socketId = shortid.generate();
+    return socketId
+}
+
+export function getOneConnectGlobalObject(id) {
+    let objectInfo = global[id]
+    if (!objectInfo) {
+        objectInfo = {
+            index: 0,
+            socket_id: id,
+            openBagTime: 0
+        }
+        global[id] = objectInfo
+    }
+    return objectInfo
 }
