@@ -163,10 +163,12 @@ export default class MsgHandle {
      * @param {*} messageId 消息的id，不是hash
      * 获取发送数据包
      */
-    getSendMsg(socketId, messageId) {
+    getSendMsg(socketId, messageId, dataPayload) {
         let index = getMessageIndex(socketId)
         let messageIdHash = getMessageHash(messageId)
-        let dataPayload = this.getDataPayload(messageId)
+        if (!dataPayload) {
+            dataPayload = this.getDataPayload(messageId)
+        }
         let sendMsg = getSendWxMsgBuf({
             index: index,
             msgId: messageIdHash,
@@ -182,16 +184,10 @@ export default class MsgHandle {
      * @param {*} msgHandle 
      * 获取接受的消息体
      */
-    getResponseMsg(data, socketId) {
-        let responseObj = {}
-        let requestInfo = getWxMsgInfo(data)
-        if (!requestInfo.msgId || typeof (requestInfo.msgId) == 'undefined') {
-            global.logger.error('解封包失败: ' + JSON.stringify(data))
-            return responseObj
-        }
-        let msgId = getMessageId(requestInfo.msgId)
+    getResponseMsg(responseObj, socketId) {
+        let msgId = getMessageId(responseObj.msgId)
         this.changeMessageHandle(msgId)
-        responseObj = this.getPayloadObject(requestInfo.dataPayload)
+        responseObj = this.getPayloadObject(responseObj.dataPayload)
         global.logger.info("MsgHandle.js/getResponseMsg/ socketId为:" + socketId + ",消息ID为：" + msgId + ',接受到的数据为：' + JSON.stringify(responseObj))
 
         return responseObj

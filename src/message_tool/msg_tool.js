@@ -1,4 +1,6 @@
 var shortid = require('shortid');
+const am = require('../data/action_map')
+
 /**
  * 
  * @param {*} hash 
@@ -44,50 +46,7 @@ export function getMessageHash(messageId) {
  * 所有消息内容
  */
 function getAllMessageHash() {
-    let mesObj = {
-        AIServerConnectRequest: 2785961655,
-        AIServerConnectReponse: 1586407982,
-        GetPointRequest: 702164294,
-        GetPointReponse: 3512394207,
-        MovePointRequest: 59566240,
-        MovePointReponse: 4211876921,
-        MoveTargetRequest: 2990857003,
-        MoveTargetReponse: 1254365106,
-        CancelMoveRequest: 1121888714,
-        CancelMoveReponse: 3126748499,
-        GetPlayerInfoRequest: 4016959104,
-        GetPlayerInfoReponse: 401416729,
-        ItemPosRequest: 660862707,
-        GetAllPickItemRequest: 2746640407,
-        GetAllPickItemReponse: 1530307726,
-        GetPickItemRequest: 2067007416,
-        GetPickItemReponse: 2209663777,
-        PickItemRequest: 875318030,
-        PickItemReponse: 3433858967,
-        PlayerAttackRequest: 3152321684,
-        PlayerAttackReponse: 1130647565,
-        BagItemInfo: 4244934888,
-        GetBagItemRequest: 1454155941,
-        GetBagItemReponse: 2922144828,
-        UseBagItemRequest: 2908652331,
-        UseBagItemReponse: 1440632754,
-        NearPlayerInfo: 3783402788,
-        GetNearPlayerRequest: 2220825613,
-        GetNearPlayerReponse: 2095042708,
-        SwitchWeaponRequest: 3848697889,
-        SwitchWeaponReponse: 501658808,
-        EquipWeaponRequest: 1463367448,
-        EquipWeaponReponse: 2948201345,
-        HorseRideRequest: 1064094392,
-        HorseRideReponse: 3354134049,
-        NearRideInfo: 1849914018,
-        GetHorseRequest: 2009770969,
-        GetHorseReponse: 2404017984,
-        LookAtRequest: 2719392492,
-        LookAtReponse: 1519808117,
-        LaunchRequest: 1592313100,
-        LaunchReponse: 2791836053,
-    }
+    let mesObj = am;
     return mesObj;
 }
 
@@ -111,6 +70,10 @@ export function getWxMsgInfo(data) {
         }
     } catch (error) {
         global.logger.error("msg_tool.js/getWxMsgInfo:" + error)
+    }
+
+    if (!result.msgId || typeof (result.msgId) == 'undefined') {
+        global.logger.error('msg_tool/getWxMsgInfo,解封包失败: ' + JSON.stringify(data))
     }
     return result
 }

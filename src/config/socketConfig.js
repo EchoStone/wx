@@ -4,6 +4,14 @@ import {
     getOneConnectGlobalObject,
     getShortId,
 } from "../message_tool/msg_tool"
+import Pusher from "../message_tool/Pusher"
+
+import {
+    AIController,
+    WXIO,
+    Response
+} from "../event/events"
+
 
 export default class socketConfig {
 
@@ -14,13 +22,30 @@ export default class socketConfig {
             global.logger.error('不存在消息处理函数，初始化失败')
             return false
         }
+        if (!option.pusherPoolHandle) {
+            console.log('不存在pusherPoolHandle函数，初始化失败');
+            global.logger.error('不存在pusherPoolHandle函数，初始化失败')
+            return false
+        }
+        if (!option.msgHandle) {
+            console.log('不存在msgHandle函数，初始化失败');
+            global.logger.error('不存在msgHandle函数，初始化失败')
+            return false
+        }
         this.cb = option.cb
+        this.pusherPoolHandle = option.pusherPoolHandle
+        this.msgHandle = option.msgHandle
     }
 
     init(waitTime = 600) {
         this.socket.socketId = getShortId()
         let sock = this.socket
         let socketId = this.socket.socketId
+
+        let io = new WXIO()
+        let onePusher = new Pusher(io, this.socket, this.msgHandle)
+        this.pusherPoolHandle.setPool(socketId, onePusher)
+        this.socket.aiController = new AIController(io)
         getOneConnectGlobalObject(socketId) // 初始化用户数据
         global.logger.debug('CONNECTED，socketId为：' + socketId + ",地址为：" + sock.remoteAddress + ':' + sock.remotePort)
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);

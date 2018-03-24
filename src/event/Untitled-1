@@ -1,0 +1,47 @@
+AIController
+
+await controller.move(0, 0).wait(1)
+let eqs = (await getEq()).wait(1)
+
+if (eqs.hasUseable()) {
+    eqs.forEach((eq)=> {
+    let usedResponse = await eq.use() // delay 5 sceonds
+    })
+}
+
+let h = await getHs()
+if (h.succeess) {
+    if ()
+}
+
+
+
+ class AIController {
+
+     constructor(socket) {
+         socket.on('data', (data) => {
+            let resposne = await msgHandle.getResponseMsg(data, socket.socketId)
+
+            for (var stack of this.messageStack) {
+                if (stack.equal(data)) {
+                    stack.invoke()
+                }
+            }
+            stack.pop()
+         })
+     }
+
+     getEq() {
+         let message = awiat this.sendMessage(this.getEQ)
+
+     }
+
+     sendMessage(callback, message) {
+         this.messageStack.push(callback, message)
+         let message = await this.originalSendMessage()
+     }
+
+     originalSendMessage() {
+
+     }
+ }
