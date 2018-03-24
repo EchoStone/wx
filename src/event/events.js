@@ -21,7 +21,8 @@ class Action {
      * 当服务器的消息到达的时候触发
      */
     delivery(response) {
-        console.log(this)
+        // console.log("Action.delivery")
+        // console.log(response)
         this.callback(response)
     }
 
@@ -72,15 +73,18 @@ class WXIO {
      * @param {Response} response 
      */
     feed(response) {
-
+        // console.log('WXIO.feed')
         var actions = [];
         for (var action of this.actions) {
+            // console.log(action.name)
+            // console.log(action.payload)
             if (response.equal(action)) {
                 action.delivery(response)
             } else {
                 actions.push(action)
             }
         }
+        // console.log("=====" + actions);
 
         this.actions = actions
     }
@@ -126,11 +130,11 @@ class AIController {
                     return new Promise((resolve, reject) => {
 
                         let args = [
-                                key,
-                                (response) => {
-                                    resolve(response)
-                                }
-                            ]
+                            key,
+                            (response) => {
+                                resolve(response)
+                            }
+                        ]
                             .concat(Array.prototype.slice.call(arguments, 0))
 
                         let action = Reflect.construct(
@@ -156,7 +160,7 @@ class AIController {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve()
-            }, 1000)
+            }, seconds * 1000)
         })
     }
 }

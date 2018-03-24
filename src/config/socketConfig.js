@@ -3,15 +3,19 @@ var net = require('net');
 import {
     getOneConnectGlobalObject,
     getShortId,
+    getWxMsgInfo,
+    getMessageId
 } from "../message_tool/msg_tool"
 import Pusher from "../message_tool/Pusher"
 
 import {
-    AIController,
     WXIO,
+    AIController,
     Response
 } from "../event/events"
 
+const io = new WXIO()
+const aiController = new AIController(io)
 
 export default class socketConfig {
 
@@ -37,21 +41,32 @@ export default class socketConfig {
         this.msgHandle = option.msgHandle
     }
 
-    init(waitTime = 600) {
+    async init(waitTime = 600) {
         this.socket.socketId = getShortId()
         let sock = this.socket
         let socketId = this.socket.socketId
 
-        let io = new WXIO()
-        let onePusher = new Pusher(io, this.socket, this.msgHandle)
-        this.pusherPoolHandle.setPool(socketId, onePusher)
-        this.socket.aiController = new AIController(io)
         getOneConnectGlobalObject(socketId) // 初始化用户数据
         global.logger.debug('CONNECTED，socketId为：' + socketId + ",地址为：" + sock.remoteAddress + ':' + sock.remotePort)
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
 
+        this.pusherPoolHandle.setPool(socketId, new Pusher(io, sock, this.msgHandle))
+        sock.aiController = aiController
+        sock.pusherPoolHandle = this.pusherPoolHandle
+
+
         sock.on('data', data => {
             this.cb(data, this.socket)
+            // console.log(pusherPoolHandle.getAll());
+
+            // let responseObj = getWxMsgInfo(data)
+            // let requestInfo = this.msgHandle.getResponseMsg(responseObj, sock.socketId)
+            // console.log('sokcetConfig.data')
+            // console.log(getMessageId(responseObj.msgId))
+            // console.log(responseObj.dataPayload)
+            // io.feed(new Response(getMessageId(responseObj.msgId), responseObj.dataPayload))
+            // console.log(requestInfo);
+
         });
 
 
@@ -64,6 +79,7 @@ export default class socketConfig {
         // 为这个socket实例添加一个"close"事件处理函数
         sock.on('close', function () {
             global[sock.socketId] = undefined
+            sock.pusherPoolHandle.delPool(socketId)
             console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
             global.logger.info('CLOSED:socketId为：' + socketId + "," + sock.remoteAddress + ' ' + sock.remotePort)
         });
@@ -71,6 +87,7 @@ export default class socketConfig {
         // 为这个socket实例添加一个"end"事件处理函数
         sock.on('end', function () {
             global[sock.socketId] = undefined
+            sock.pusherPoolHandle.delPool(socketId)
             console.log('end: ' + sock.remoteAddress + ' ' + sock.remotePort);
             global.logger.info('end:socketId为：' + socketId + "," + sock.remoteAddress + ' ' + sock.remotePort)
         });
@@ -93,6 +110,20 @@ export default class socketConfig {
             global.logger.info('socket timeout')
             sock.end();
         });
+        // console.log(333);
+
+        // let re = await sock.aiController.movePointRequest()
+        // console.log(re);
+
+        // // re.then(data => {
+        // //     console.log(22222);
+        // //     console.log(data);
+
+        // // })
+
+        // console.log("==2222===");
+        // sock.aiController.movePointRequest()
+        // sock.aiController.movePointRequest()
 
     }
 

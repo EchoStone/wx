@@ -166,7 +166,8 @@ export default class MsgHandle {
     getSendMsg(socketId, messageId, dataPayload) {
         let index = getMessageIndex(socketId)
         let messageIdHash = getMessageHash(messageId)
-        if (!dataPayload) {
+
+        if (typeof (dataPayload) == 'undefined') {
             dataPayload = this.getDataPayload(messageId)
         }
         let sendMsg = getSendWxMsgBuf({

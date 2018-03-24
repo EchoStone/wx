@@ -10,4 +10,12 @@ export default class PusherPool {
     getPool(socketID) {
         return this.poll[socketID]
     }
+
+    delPool(socketID) {
+        delete this.poll[socketID]
+    }
+
+    getAll() {
+        return this.poll
+    }
 }

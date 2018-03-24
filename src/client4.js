@@ -50,8 +50,11 @@ protobuf.load("AIMsg.proto", function (err, root) {
         // 建立连接后立即向服务器发送数据，服务器将收到这些数据 
         // socket.write('I am Chuck Norris!');
         // socket.write(message);
-        console.log(buffer)
         socket.write(message);
+
+
+        // console.log(buffer)
+        // socket.write(message2);
 
 
     });
@@ -66,10 +69,33 @@ protobuf.load("AIMsg.proto", function (err, root) {
     var GetAllPickItemReponse = root.lookupType("msg.GetAllPickItemReponse");
 
     socket.on("data", function (msg) {
+        console.log(2);
+
         // console.log("[UDP-CLIENT] Received message: " + HelloCoverRsp.decode(msg).reply + " from " + rinfo.address + ":" + rinfo.port);
         msg = msg.slice(10, msg.length)
         console.log(MovePointRequest.decode(msg));
 
+        coverRspObj = {
+            PlayerId: 777
+        };
+
+        message = MovePointRequest.create(coverRspObj);
+        buffer = MovePointRequest.encode(message).finish();
+        msgIdRequest = 2785961655;
+        index = 1
+        const bufIndex2 = Buffer.allocUnsafe(2);
+        bufIndex2.writeUInt16LE(index)
+
+        const bufMsgIdRequest2 = Buffer.allocUnsafe(4);
+        bufMsgIdRequest2.writeUInt32LE(msgIdRequest)
+
+        var msgLength2 = buffer.length
+        const bufMsgLength2 = Buffer.allocUnsafe(4);
+        bufMsgLength2.writeUInt32LE(msgLength2)
+
+        const totalLength2 = bufIndex2.length + bufMsgIdRequest2.length + bufMsgLength2.length + buffer.length;
+        message2 = Buffer.concat([bufIndex2, bufMsgIdRequest2, bufMsgLength2, buffer], totalLength2);
+        socket.write(message2);
         //udpSocket = null;
     });
 
