@@ -11,6 +11,10 @@
             "nearby": 3.3
         }]
     },
+    "GetAllPickItemRequest": {
+        "type": "none",
+        "value": []
+    },
     "GetAllPickItemReponse": {
         "type": "one",
         "value": [{

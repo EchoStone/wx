@@ -24,19 +24,21 @@ const waitTime = 60 * 100
 const protoFilePath = __dirname + '/protobuf/bundle.json'
 var PORT = 9602;
 var HOST = '0.0.0.0';
-const io = new WXIO()
-const pusherPoolHandle = new PusherPool()
 const msgHandle = new MsgHandle(protoFilePath)
-const aiController = new AIController(io)
+const pusherPoolHandle = new PusherPool()
 
 async function registerDataEnvent(data, socket) {
     // console.log(pusherPoolHandle.getAll());
+    console.log(`registerDataEnvent ${data.length}`)
     let responseObj = getWxMsgInfo(data)
     let requestInfo = msgHandle.getResponseMsg(responseObj, socket.socketId)
+    console.log(`registerDataEnvent ${responseObj.msgId}`)
     socket.aiController.io.feed(new Response(getMessageId(responseObj.msgId), responseObj.dataPayload))
 
     if (requestInfo) {
-        console.log(requestInfo);
+        // console.log('requestInfo');
+
+        // console.log(requestInfo);
     }
 
     // await socket.aiController.wait(1)
@@ -66,18 +68,39 @@ var server = net.createServer(function (socket) {
 }).listen(PORT, HOST);
 server.maxConnections = maxConnections
 
-// server.on('connection', async (socket) => {
-//     pusherPoolHandle.setPool(socket.socketId, new Pusher(io, socket, msgHandle))
-//     socket.aiController = aiController
-//     socket.pusherPoolHandle = pusherPoolHandle
-//     console.log(222);
+server.on('connection', async (sock) => {
 
-//     // let re = await socket.aiController.movePointRequest()
+    console.log(sock.socketId);
 
-//     // console.log(re);
-//     // console.log("===3333==");
+    // sock.aiController.AIServerConnectRequest.then((player) => {
+
+    // })
+
+    await sock.aiController.wait(5)
+    console.log(3333);
+    try {
+        let re = await sock.aiController.movePointRequest({
+            x: 1
+        })
+        console.log("connection re :" + re);
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    try {
+        await sock.aiController.wait(5)
+        console.log("等了5s");
+
+        let getAllPickItemRequest = await sock.aiController.getAllPickItemRequest()
+        console.log(getAllPickItemRequest);
+    } catch (error) {
+        console.log("getAllPickItemRequest 超时");
+
+    }
+    console.log(555333);
 
 
-// })
+})
 
 console.log('Server listening on ' + HOST + ':' + PORT);

@@ -15,14 +15,16 @@ class Action {
         this._name = name
         this.callback = callback
         this.payload = Array.prototype.slice.call(arguments, 2)
+        this.timeout = 5
     }
 
     /**
      * 当服务器的消息到达的时候触发
      */
     delivery(response) {
-        // console.log("Action.delivery")
-        // console.log(response)
+        this.didDelivery = true
+        console.log("Action.delivery")
+        console.log(response)
         this.callback(response)
     }
 
@@ -32,6 +34,22 @@ class Action {
 
     set name(value) {
         this._name = value
+    }
+
+    get didDelivery() {
+        return this._didDelivery
+    }
+
+    set setDidDelivery(didDelivery) {
+        this._didDelivery = didDelivery
+    }
+
+    get timeout() {
+        return this._timeout
+    }
+
+    set timeout(timeout) {
+        this._timeout = timeout
     }
 }
 
@@ -51,7 +69,7 @@ class Response {
 
     equal(action) {
 
-        return this._name.initialLower() == action.name
+        return this._name.initialLower().replace('Response', '') == action.name.replace('Request', '')
     }
 
     get name() {
@@ -73,11 +91,13 @@ class WXIO {
      * @param {Response} response 
      */
     feed(response) {
-        // console.log('WXIO.feed')
+        console.log('WXIO.feed')
+        console.log(`Response name is ${response.name}`)
         var actions = [];
+        console.log(`actions length is ${this.actions.length}`)
         for (var action of this.actions) {
-            // console.log(action.name)
-            // console.log(action.payload)
+            console.log(action.name)
+            console.log(action.payload)
             if (response.equal(action)) {
                 action.delivery(response)
             } else {
@@ -90,6 +110,7 @@ class WXIO {
     }
 
     executeAction(action) {
+        console.log('WXIO.executeAction ' + action.name)
         this.actions.push(action)
         this._pusher.push(action.name.initialUpper(), action.payload)
     }
@@ -128,14 +149,14 @@ class AIController {
                 return function () {
 
                     return new Promise((resolve, reject) => {
-
                         let args = [
-                            key,
-                            (response) => {
-                                resolve(response)
-                            }
-                        ]
+                                key,
+                                (response) => {
+                                    resolve(response)
+                                }
+                            ]
                             .concat(Array.prototype.slice.call(arguments, 0))
+                        console.log(args);
 
                         let action = Reflect.construct(
                             Action,
@@ -143,6 +164,15 @@ class AIController {
                         )
 
                         this.io.executeAction(action)
+
+                        setTimeout(() => {
+                            if (!action.didDelivery) {
+                                console.log(`Controller.${key} rejection `)
+                                reject(new Response(
+                                    action.name, {}
+                                ))
+                            }
+                        }, action.timeout)
                     })
                 }
             }(key)

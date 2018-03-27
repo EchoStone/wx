@@ -207,6 +207,7 @@ export default class MsgHandle {
                 socket.write(msg)
             }, time * 1000)
         } else {
+            console.log(`handleToSendMsg ${msg.length}`)
             socket.write(msg)
         }
     }

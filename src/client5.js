@@ -3,8 +3,8 @@ var dgram = require('net');
 
 var protobuf = require("protobufjs");
 var PORT = 9602;
-var HOST = '127.0.0.1';
-// var HOST = '47.91.244.187';
+// var HOST = '127.0.0.1';
+var HOST = '47.91.244.187';
 
 
 protobuf.load("AIMsg.proto", function (err, root) {
@@ -37,8 +37,6 @@ protobuf.load("AIMsg.proto", function (err, root) {
 
     const totalLength = bufIndex.length + bufMsgIdRequest.length + bufMsgLength.length + buffer.length;
     message = Buffer.concat([bufIndex, bufMsgIdRequest, bufMsgLength, buffer], totalLength);
-    console.log("连接的时候message长度：" + message.length);
-
     var socket = new dgram.Socket();
 
     console.log("zhi:=====" + bufMsgIdRequest.readUInt32LE(0))
@@ -52,14 +50,8 @@ protobuf.load("AIMsg.proto", function (err, root) {
         // 建立连接后立即向服务器发送数据，服务器将收到这些数据 
         // socket.write('I am Chuck Norris!');
         // socket.write(message);
-        console.log(message);
-        console.log(" connect 发送message长度：" + message.length);
-
+        console.log(buffer)
         socket.write(message);
-
-
-        // console.log(buffer)
-        // socket.write(message2);
 
 
     });
@@ -74,36 +66,10 @@ protobuf.load("AIMsg.proto", function (err, root) {
     var GetAllPickItemReponse = root.lookupType("msg.GetAllPickItemReponse");
 
     socket.on("data", function (msg) {
-        console.log(2);
-
         // console.log("[UDP-CLIENT] Received message: " + HelloCoverRsp.decode(msg).reply + " from " + rinfo.address + ":" + rinfo.port);
         msg = msg.slice(10, msg.length)
         console.log(MovePointRequest.decode(msg));
-        console.log(" on data 发送message长度：" + message.length);
 
-        socket.write(message);
-
-        coverRspObj = {
-            PlayerId: 777
-        };
-
-        // message = MovePointRequest.create(coverRspObj);
-        // buffer = MovePointRequest.encode(message).finish();
-        // msgIdRequest = 2785961655;
-        // index = 1
-        // const bufIndex2 = Buffer.allocUnsafe(2);
-        // bufIndex2.writeUInt16LE(index)
-
-        // const bufMsgIdRequest2 = Buffer.allocUnsafe(4);
-        // bufMsgIdRequest2.writeUInt32LE(msgIdRequest)
-
-        // var msgLength2 = buffer.length
-        // const bufMsgLength2 = Buffer.allocUnsafe(4);
-        // bufMsgLength2.writeUInt32LE(msgLength2)
-
-        // const totalLength2 = bufIndex2.length + bufMsgIdRequest2.length + bufMsgLength2.length + buffer.length;
-        // message2 = Buffer.concat([bufIndex2, bufMsgIdRequest2, bufMsgLength2, buffer], totalLength2);
-        // socket.write(message);
         //udpSocket = null;
     });
 

@@ -10,6 +10,7 @@ export default class Pusher {
     }
 
     push(name, payload) {
+        console.log(`Pusher.push ${name}`)
         if (Object.prototype.toString.call(payload)) {
             payload = payload[0]
         }

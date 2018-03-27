@@ -50,6 +50,8 @@ export default class socketConfig {
         global.logger.debug('CONNECTED，socketId为：' + socketId + ",地址为：" + sock.remoteAddress + ':' + sock.remotePort)
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
 
+        const io = new WXIO()
+        const aiController = new AIController(io)
         this.pusherPoolHandle.setPool(socketId, new Pusher(io, sock, this.msgHandle))
         sock.aiController = aiController
         sock.pusherPoolHandle = this.pusherPoolHandle
@@ -110,10 +112,6 @@ export default class socketConfig {
             global.logger.info('socket timeout')
             sock.end();
         });
-        // console.log(333);
-
-        // let re = await sock.aiController.movePointRequest()
-        // console.log(re);
 
         // // re.then(data => {
         // //     console.log(22222);
