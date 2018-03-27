@@ -34,7 +34,7 @@ async function registerDataEnvent(data, socket) {
     let requestInfo = msgHandle.getResponseMsg(responseObj, socket.socketId)
     console.log(`registerDataEnvent ${responseObj.msgId}`)
     socket.aiController.io.feed(new Response(getMessageId(responseObj.msgId), responseObj.dataPayload))
-
+    console.log("数据到达：" + getMessageId(responseObj.msgId));
     if (requestInfo) {
         // console.log('requestInfo');
 
@@ -76,24 +76,30 @@ server.on('connection', async (sock) => {
 
     // })
 
-    await sock.aiController.wait(5)
-    console.log(3333);
+
+
+    // await sock.aiController.wait(5)
+    // console.log(3333);
     try {
-        let re = await sock.aiController.movePointRequest({
-            x: 1
+        // let re = await sock.aiController.movePointRequest()
+        sock.aiController.movePointRequest().then((res) => {
+            console.log(res)
+        }).catch((err) => {
+            console.log(err)
         })
-        console.log("connection re :" + re);
+        // console.log("connection re :" + re);
 
     } catch (error) {
+        console.log("connection re : error");
         console.log(error);
     }
 
     try {
-        await sock.aiController.wait(5)
-        console.log("等了5s");
+        // await sock.aiController.wait(5)
+        // console.log("等了5s");
 
-        let getAllPickItemRequest = await sock.aiController.getAllPickItemRequest()
-        console.log(getAllPickItemRequest);
+        // let getAllPickItemRequest = await sock.aiController.getAllPickItemRequest()
+        // console.log(getAllPickItemRequest);
     } catch (error) {
         console.log("getAllPickItemRequest 超时");
 

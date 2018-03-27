@@ -15,7 +15,7 @@ class Action {
         this._name = name
         this.callback = callback
         this.payload = Array.prototype.slice.call(arguments, 2)
-        this.timeout = 5
+        this.timeout = 15
     }
 
     /**
@@ -25,6 +25,7 @@ class Action {
         this.didDelivery = true
         console.log("Action.delivery")
         console.log(response)
+        console.log(this.callback)
         this.callback(response)
     }
 
@@ -40,7 +41,7 @@ class Action {
         return this._didDelivery
     }
 
-    set setDidDelivery(didDelivery) {
+    set didDelivery(didDelivery) {
         this._didDelivery = didDelivery
     }
 
@@ -68,8 +69,11 @@ class Response {
     }
 
     equal(action) {
+        let responseName = this._name.initialLower().replace('Reponse', '')
+        let requestName = action.name.replace('Request', '')
 
-        return this._name.initialLower().replace('Response', '') == action.name.replace('Request', '')
+        console.log(`Response.equal ${responseName} == ${requestName}`)
+        return responseName == requestName
     }
 
     get name() {
@@ -109,6 +113,10 @@ class WXIO {
         this.actions = actions
     }
 
+    on(eventName, callback) {
+
+    }
+
     executeAction(action) {
         console.log('WXIO.executeAction ' + action.name)
         this.actions.push(action)
@@ -146,8 +154,9 @@ class AIController {
 
         for (var key of this.actions) {
             this[key] = function (key) {
+                // console.log('1.3')
                 return function () {
-
+                    console.log('1.2 ' + arguments)
                     return new Promise((resolve, reject) => {
                         let args = [
                                 key,
@@ -156,7 +165,11 @@ class AIController {
                                 }
                             ]
                             .concat(Array.prototype.slice.call(arguments, 0))
-                        console.log(args);
+                        console.log('1.0' + args);
+
+                        for (var arg of args) {
+                            console.log(arg)
+                        }
 
                         let action = Reflect.construct(
                             Action,
@@ -172,7 +185,7 @@ class AIController {
                                     action.name, {}
                                 ))
                             }
-                        }, action.timeout)
+                        }, action.timeout * 1000)
                     })
                 }
             }(key)
