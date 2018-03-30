@@ -1,28 +1,160 @@
 {
+    "AIServerConnectReponse": {
+        "type": "one",
+        "value": [
+            {
+                "result": 0
+            }
+        ]
+    },
+    "GetPointRequest": {
+        "type": "none",
+        "value": []
+    },
     "MovePointRequest": {
         "type": "one",
-        "value": [{
-            "X": 1000,
-            "Y": 2330,
-            "nearby": 3.2
-        }, {
-            "X": 1111,
-            "Y": 2222,
-            "nearby": 3.3
-        }]
-    },
-    "GetAllPickItemReponse": {
-        "type": "one",
-        "value": [{
-            "items": {
-                "parent": "ItemPosRequest",
-                "type": "random"
+        "value": [
+            {
+                "X": 0,
+                "Y": 0,
+                "nearby": 3.2
+            },
+            {
+                "X": 1111,
+                "Y": 2222,
+                "nearby": 3.3
             }
-        }]
+        ]
+    },
+    "MoveTargetRequest": {
+        "type": "one",
+        "value": [
+            {
+                "target": 1000,
+                "nearby": 3.2
+            }
+        ]
+    },
+    "CancelMoveRequest": {
+        "type": "none",
+        "value": []
+    },
+    "GetPlayerInfoRequest": {
+        "type": "none",
+        "value": []
+    },
+    "GetAllPickItemRequest": {
+        "type": "none",
+        "value": []
+    },
+    "GetPickItemRequest": {
+        "type": "none",
+        "value": []
+    },
+    "PickItemRequest": {
+        "type": "none",
+        "value": [
+            {
+                "itemUId": 3223
+            }
+        ]
+    },
+    "SetAttackIdRequest": {
+        "type": "none",
+        "value": []
+    },
+    "CancelAttackIdRequest": {
+        "type": "none",
+        "value": []
+    },
+    "GetAttackIdRequest": {
+        "type": "none",
+        "value": []
+    },
+    "PlayerAttackRequest": {
+        "type": "one",
+        "value": [
+            {
+                "skillAttack": 1
+            }
+        ]
+    },
+    "GetBagItemRequest": {
+        "type": "none",
+        "value": []
+    },
+    "UseBagItemRequest": {
+        "type": "one",
+        "value": [
+            {
+                "bagItems": {
+                    "parent": "BagItemInfo",
+                    "type": "one"
+                }
+            }
+        ]
+    },
+    "BagItemInfo": {
+        "type": "one",
+        "value": [
+            {
+                "itemindex": 12,
+                "itemId": 22,
+                "num": 33
+            }
+        ]
+    },
+    "GetNearPlayerRequest": {
+        "type": "none",
+        "value": []
+    },
+    "SwitchWeaponRequest": {
+        "type": "one",
+        "value": [
+            {
+                "pos": 0
+            }
+        ]
+    },
+    "EquipWeaponRequest": {
+        "type": "one",
+        "value": [
+            {
+                "bagIndex": 1,
+                "equipIndex": 3
+            }
+        ]
+    },
+    "HorseRideRequest": {
+        "type": "one",
+        "value": [
+            {
+                "ride": true
+            }
+        ]
+    },
+    "GetHorseRequest": {
+        "type": "none",
+        "value": []
+    },
+    "LookAtRequest": {
+        "type": "one",
+        "value": [
+            {
+                "X": 1323,
+                "Y": 3332,
+                "Z": 334
+            }
+        ]
+    },
+    "LaunchRequest": {
+        "type": "none",
+        "value": []
     },
     "ItemPosRequest": {
         "type": "one",
-        "value": [{
+        "value": [
+            {
                 "itemUId": 83,
                 "itemId": 91,
                 "X": 2001,

@@ -15,14 +15,18 @@ class Action {
         this._name = name
         this.callback = callback
         this.payload = Array.prototype.slice.call(arguments, 2)
+        this.timeout = 15
     }
 
     /**
      * 当服务器的消息到达的时候触发
      */
     delivery(response) {
-        // console.log("Action.delivery")
-        // console.log(response)
+        this.didDelivery = true
+        console.log('Action.delivery ' + this.name)
+        // console.log(this.callback)
+        response.action = this
+        response.timeout = false
         this.callback(response)
     }
 
@@ -32,6 +36,22 @@ class Action {
 
     set name(value) {
         this._name = value
+    }
+
+    get didDelivery() {
+        return this._didDelivery
+    }
+
+    set didDelivery(didDelivery) {
+        this._didDelivery = didDelivery
+    }
+
+    get timeout() {
+        return this._timeout
+    }
+
+    set timeout(timeout) {
+        this._timeout = timeout
     }
 }
 
@@ -50,8 +70,12 @@ class Response {
     }
 
     equal(action) {
+        console.log(`Response.equal`)
+        let responseName = this._name.initialLower().replace('Reponse', '')
+        let requestName = action.name.replace('Request', '')
 
-        return this._name.initialLower() == action.name
+        console.log(`Response.equal ${responseName} == ${requestName}`)
+        return responseName == requestName
     }
 
     get name() {
@@ -73,14 +97,16 @@ class WXIO {
      * @param {Response} response 
      */
     feed(response) {
-        // console.log('WXIO.feed')
+        console.log(`WXIO.feed ${response.name}`)
         var actions = [];
+        console.log('search for actions')
+        console.log(`actions length is ${this.actions.length}`)
         for (var action of this.actions) {
-            // console.log(action.name)
-            // console.log(action.payload)
             if (response.equal(action)) {
+                console.log(`found and delivery ${action.name}`)
                 action.delivery(response)
             } else {
+                console.log(`not found and push to list again`)
                 actions.push(action)
             }
         }
@@ -89,7 +115,12 @@ class WXIO {
         this.actions = actions
     }
 
+    on(eventName, callback) {
+
+    }
+
     executeAction(action) {
+        console.log(`WXIO.executeAction ${action.name}`)
         this.actions.push(action)
         this._pusher.push(action.name.initialUpper(), action.payload)
     }
@@ -126,16 +157,20 @@ class AIController {
         for (var key of this.actions) {
             this[key] = function (key) {
                 return function () {
-
                     return new Promise((resolve, reject) => {
-
+                        console.log(`AIController.${key}`)
                         let args = [
-                            key,
-                            (response) => {
-                                resolve(response)
-                            }
-                        ]
+                                key,
+                                (response) => {
+                                    resolve(response)
+                                }
+                            ]
                             .concat(Array.prototype.slice.call(arguments, 0))
+                        console.log('1.0' + args);
+
+                        for (var arg of args) {
+                            console.log(arg)
+                        }
 
                         let action = Reflect.construct(
                             Action,
@@ -143,6 +178,20 @@ class AIController {
                         )
 
                         this.io.executeAction(action)
+
+                        setTimeout(() => {
+                            if (!action.didDelivery) {
+                                console.log(`Controller.${key} rejection `)
+                                // reject(new Response(
+                                //     action.name, {}
+                                // ))
+                                resolve(new Response(
+                                    action.name, {
+                                        "timeout": true
+                                    }
+                                ))
+                            }
+                        }, action.timeout * 1000)
                     })
                 }
             }(key)

@@ -116,6 +116,16 @@ export function getMessageIndex(id) {
     return obj.index
 }
 
+export function getSmallMsgInfo(responseObj) {
+    return {
+        index: responseObj.index,
+        msgHash: responseObj.msgId,
+        msgId: getMessageId(responseObj.msgId),
+        msgLength: responseObj.msgLength,
+    }
+}
+
+
 function getOneConnectGlobalObject(id) {
     if (!id || typeof (id) == 'undefined') {
         global.logger.error("msg_tool.js/getOneConnectGlobalObject: socketId 不能为空")

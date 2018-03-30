@@ -151,6 +151,8 @@ export default class MsgHandle {
                 enums: String,
                 bytes: String,
             });
+            console.log('getPayloadObject')
+            console.log(message)
         } catch (error) {
             global.logger.error("MsgHandle.js/getPayloadObject:" + error)
         }
@@ -207,6 +209,7 @@ export default class MsgHandle {
                 socket.write(msg)
             }, time * 1000)
         } else {
+            console.log(`handleToSendMsg ${msg.length}`)
             socket.write(msg)
         }
     }

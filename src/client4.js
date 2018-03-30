@@ -37,6 +37,8 @@ protobuf.load("AIMsg.proto", function (err, root) {
 
     const totalLength = bufIndex.length + bufMsgIdRequest.length + bufMsgLength.length + buffer.length;
     message = Buffer.concat([bufIndex, bufMsgIdRequest, bufMsgLength, buffer], totalLength);
+    console.log("连接的时候message长度：" + message.length);
+
     var socket = new dgram.Socket();
 
     console.log("zhi:=====" + bufMsgIdRequest.readUInt32LE(0))
@@ -50,6 +52,9 @@ protobuf.load("AIMsg.proto", function (err, root) {
         // 建立连接后立即向服务器发送数据，服务器将收到这些数据 
         // socket.write('I am Chuck Norris!');
         // socket.write(message);
+        console.log(message);
+        console.log(" connect 发送message长度：" + message.length);
+
         socket.write(message);
 
 
@@ -69,19 +74,22 @@ protobuf.load("AIMsg.proto", function (err, root) {
     var GetAllPickItemReponse = root.lookupType("msg.GetAllPickItemReponse");
 
     socket.on("data", function (msg) {
-        console.log(2);
 
         // console.log("[UDP-CLIENT] Received message: " + HelloCoverRsp.decode(msg).reply + " from " + rinfo.address + ":" + rinfo.port);
         msg = msg.slice(10, msg.length)
         console.log(MovePointRequest.decode(msg));
+        console.log(" on data 发送message长度：" + message.length);
+
+        // socket.write(message);
 
         coverRspObj = {
-            PlayerId: 777
+            result: 1
         };
+        var MovePointReponse = root.lookupType("msg.MovePointReponse");
 
-        message = MovePointRequest.create(coverRspObj);
-        buffer = MovePointRequest.encode(message).finish();
-        msgIdRequest = 2785961655;
+        message = MovePointReponse.create(coverRspObj);
+        buffer = MovePointReponse.encode(message).finish();
+        msgIdRequest = 4211876921;
         index = 1
         const bufIndex2 = Buffer.allocUnsafe(2);
         bufIndex2.writeUInt16LE(index)
@@ -95,6 +103,8 @@ protobuf.load("AIMsg.proto", function (err, root) {
 
         const totalLength2 = bufIndex2.length + bufMsgIdRequest2.length + bufMsgLength2.length + buffer.length;
         message2 = Buffer.concat([bufIndex2, bufMsgIdRequest2, bufMsgLength2, buffer], totalLength2);
+        socket.write(message2);
+        socket.write(message2);
         socket.write(message2);
         //udpSocket = null;
     });

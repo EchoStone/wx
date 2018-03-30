@@ -16,6 +16,7 @@
   "dependencies": {
     "config": "^1.30.0",
     "dgram": "^1.0.1",
+    "graylog2": "^0.2.1",
     "knuth-shuffle": "^1.0.8",
     "log4js": "^2.5.3",
     "protobufjs": "^6.8.6",
